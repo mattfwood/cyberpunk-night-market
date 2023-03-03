@@ -1,4 +1,7 @@
+import localFont from 'next/font/local'
 import './globals.css'
+
+const mainFont = localFont({ src: '../BlenderPro-Medium.woff2' })
 
 export const metadata = {
   title: 'Create Next App',
@@ -12,7 +15,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className={mainFont.className}><div className="bg-secondary min-h-screen text-white">
+        {children}
+      </div></body>
     </html>
   )
 }
