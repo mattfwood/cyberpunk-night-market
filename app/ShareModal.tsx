@@ -1,4 +1,5 @@
 import { Dialog } from '@headlessui/react';
+import { ExclamationCircleIcon } from '@heroicons/react/20/solid';
 import QRCode from 'qrcode';
 import { useEffect, useState } from 'react';
 
@@ -49,6 +50,12 @@ export function ShareModal() {
             ) : (
               <div className="animate-pulse w-full">Generating QR Code...</div>
             )}
+            {/* warning callout */}
+            <div className="mt-4 flex bg-primary p-2 rounded-md text-white">
+              <ExclamationCircleIcon width="20px" style={{ marginRight: 6 }} />{' '}
+              All Data is stored in URL. <br /> To re-use this store, bookmark
+              it
+            </div>
           </Dialog.Panel>
         </div>
       </Dialog>
