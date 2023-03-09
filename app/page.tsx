@@ -2,7 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import qs from 'qs';
+import QRCode from 'qrcode';
+
 import Item, { ItemForm } from './Item';
+import { ShareModal } from './ShareModal';
 
 export type ItemType = {
   name: string;
@@ -26,6 +29,7 @@ const defaultItems = [
 
 export default function Home() {
   const [items, setItems] = useState<ItemType[]>(defaultItems);
+  const [qrCode, setQrCode] = useState('');
 
   const groupedItems = items.reduce((acc, item) => {
     if (!acc[item.category]) {
@@ -65,28 +69,40 @@ export default function Home() {
     window.history.replaceState({}, '', `/?${query}`);
   }, [items]);
 
+  async function getQrCode() {
+    const qrCode = await QRCode.toDataURL(window.location.href);
+    setQrCode(qrCode);
+  }
+
+  useEffect(() => {
+    getQrCode();
+  }, []);
+
   return (
-    <div className="flex justify-center">
-      <main className="w-full max-w-2xl py-2">
-        {Object.entries(groupedItems).map(([category, items]) => (
-          <div key={category}>
-            <h2 className="text-3xl font-bold capitalize">{category}</h2>
-            {items.map((item) => (
-              <Item
-                item={item}
-                updateItemQuantity={updateItemQuantity}
-                key={item.name}
-              />
-            ))}
+    <div>
+      <div className="flex justify-center px-2">
+        <main className="w-full max-w-2xl py-2">
+          <ShareModal />
+          {Object.entries(groupedItems).map(([category, items]) => (
+            <div key={category}>
+              <h2 className="text-3xl font-bold capitalize">{category}</h2>
+              {items.map((item) => (
+                <Item
+                  item={item}
+                  updateItemQuantity={updateItemQuantity}
+                  key={item.name}
+                />
+              ))}
+            </div>
+          ))}
+          <ItemForm
+            onSubmit={(newItem) => setItems((prev) => [...prev, newItem])}
+          />
+          <div className="flex justify-end">
+            <h2 className="text-2xl font-bold">Total: €{total}</h2>
           </div>
-        ))}
-        <ItemForm
-          onSubmit={(newItem) => setItems((prev) => [...prev, newItem])}
-        />
-        <div className="flex justify-end">
-          <h2 className="text-2xl font-bold">Total: €{total}</h2>
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 }
