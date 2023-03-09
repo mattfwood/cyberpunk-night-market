@@ -14,7 +14,7 @@ const Item = ({ item, updateItemQuantity }: ItemProps) => {
   return (
     <Disclosure>
       {({ open }) => (
-        <div className="p-4 mb-4">
+        <div className="py-2 px-1 mb-4">
           <div key={item.name} className="flex">
             <div className="w-full">
               <Disclosure.Button className="flex justify-between items-center w-full hover:bg-primary-200 transition-all p-2">
@@ -104,7 +104,7 @@ export function ItemForm({ onSubmit }: { onSubmit: (item: ItemType) => void }) {
         </form>
       )}
       <button
-        className={`${buttonStyle} bg-secondary text-white p-2 mt-2 block w-full`}
+        className={`${buttonStyle} text-white p-2 mt-2 block w-full`}
         onClick={() => setFormVisible((prev) => !prev)}
       >
         {formVisible ? 'Cancel' : 'Add Item'}

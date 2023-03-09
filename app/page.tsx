@@ -29,7 +29,6 @@ const defaultItems = [
 
 export default function Home() {
   const [items, setItems] = useState<ItemType[]>(defaultItems);
-  const [qrCode, setQrCode] = useState('');
 
   const groupedItems = items.reduce((acc, item) => {
     if (!acc[item.category]) {
@@ -60,7 +59,9 @@ export default function Home() {
     }) as unknown;
     console.log(query);
     const { items } = query as { items: ItemType[] };
-    setItems(items as ItemType[]);
+    if (items && items?.length) {
+      setItems(items as ItemType[]);
+    }
   }, []);
 
   // persist items in query string
@@ -68,15 +69,6 @@ export default function Home() {
     const query = qs.stringify({ items });
     window.history.replaceState({}, '', `/?${query}`);
   }, [items]);
-
-  async function getQrCode() {
-    const qrCode = await QRCode.toDataURL(window.location.href);
-    setQrCode(qrCode);
-  }
-
-  useEffect(() => {
-    getQrCode();
-  }, []);
 
   return (
     <div>
@@ -95,12 +87,12 @@ export default function Home() {
               ))}
             </div>
           ))}
-          <ItemForm
-            onSubmit={(newItem) => setItems((prev) => [...prev, newItem])}
-          />
           <div className="flex justify-end">
             <h2 className="text-2xl font-bold">Total: €{total}</h2>
           </div>
+          <ItemForm
+            onSubmit={(newItem) => setItems((prev) => [...prev, newItem])}
+          />
         </main>
       </div>
     </div>

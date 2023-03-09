@@ -21,7 +21,7 @@ export function ShareModal() {
   return (
     <>
       <button
-        className="bg-primary text-white p-2 rounded-md"
+        className="ml-[100%] bg-primary text-white p-2 rounded-md"
         onClick={openModal}
       >
         Share
