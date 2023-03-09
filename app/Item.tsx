@@ -2,6 +2,7 @@
 
 import { Disclosure } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import { useState } from 'react';
 import { ItemType } from './page';
 
 type ItemProps = {
@@ -49,5 +50,67 @@ const Item = ({ item, updateItemQuantity }: ItemProps) => {
     </Disclosure>
   );
 };
+
+const FORM_FIELDS = ['name', 'company', 'description', 'price', 'category'];
+
+export function ItemForm({ onSubmit }: { onSubmit: (item: ItemType) => void }) {
+  const [formVisible, setFormVisible] = useState(false);
+  const buttonStyle = formVisible ? 'bg-secondary' : 'bg-primary';
+
+  return (
+    <div>
+      {formVisible && (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            console.log('SUBMITTING');
+            const target = e.target as typeof e.target & {
+              name: { value: string };
+              company: { value: string };
+              description: { value: string };
+              price: { value: string };
+              category: { value: string };
+            };
+            const item = {
+              name: target.name.value,
+              company: target.company.value,
+              description: target.description.value,
+              price: parseInt(target.price.value),
+              category: target.category.value.toLowerCase(),
+              quantity: 0,
+            };
+            onSubmit(item);
+          }}
+        >
+          <div className="grid gap-2 grid-cols-2">
+            {FORM_FIELDS.map((field) => (
+              <label className="capitalize" key={field}>
+                <div className="text-sm">{field}</div>
+                <input
+                  className="border border-gray-300 text-secondary p-1 w-full"
+                  type="text"
+                  name={field}
+                  id={field}
+                />
+              </label>
+            ))}
+          </div>
+          <button
+            className="bg-primary text-white p-2 mt-2 block w-full"
+            type="submit"
+          >
+            Add
+          </button>
+        </form>
+      )}
+      <button
+        className={`${buttonStyle} bg-secondary text-white p-2 mt-2 block w-full`}
+        onClick={() => setFormVisible((prev) => !prev)}
+      >
+        {formVisible ? 'Cancel' : 'Add Item'}
+      </button>
+    </div>
+  );
+}
 
 export default Item;

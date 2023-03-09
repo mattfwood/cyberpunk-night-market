@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import Item from './Item';
+import { useEffect, useState } from 'react';
+import qs from 'qs';
+import Item, { ItemForm } from './Item';
 
 export type ItemType = {
   name: string;
@@ -10,7 +11,7 @@ export type ItemType = {
   price: number;
   category: string;
   quantity: number;
-} & { [key: string]: string };
+};
 
 const defaultItems = [
   {
@@ -48,6 +49,22 @@ export default function Home() {
     return acc + item.price * item.quantity;
   }, 0);
 
+  // load items from query string
+  useEffect(() => {
+    const query = qs.parse(window.location.search, {
+      ignoreQueryPrefix: true,
+    }) as unknown;
+    console.log(query);
+    const { items } = query as { items: ItemType[] };
+    setItems(items as ItemType[]);
+  }, []);
+
+  // persist items in query string
+  useEffect(() => {
+    const query = qs.stringify({ items });
+    window.history.replaceState({}, '', `/?${query}`);
+  }, [items]);
+
   return (
     <div className="flex justify-center">
       <main className="w-full max-w-2xl py-2">
@@ -63,6 +80,9 @@ export default function Home() {
             ))}
           </div>
         ))}
+        <ItemForm
+          onSubmit={(newItem) => setItems((prev) => [...prev, newItem])}
+        />
         <div className="flex justify-end">
           <h2 className="text-2xl font-bold">Total: €{total}</h2>
         </div>
