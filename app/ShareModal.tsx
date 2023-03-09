@@ -39,7 +39,7 @@ export function ShareModal() {
             <Dialog.Title className="text-lg font-bold">
               Share Link to Night Market
             </Dialog.Title>
-            {!qrCode ? (
+            {qrCode ? (
               <img
                 className="max-w-[404px] max-h-[404px] w-full h-full"
                 // @ts-ignore

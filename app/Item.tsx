@@ -1,11 +1,7 @@
 'use client';
 
 import { Disclosure } from '@headlessui/react';
-import {
-  ChevronDownIcon,
-  LockClosedIcon,
-  XCircleIcon,
-} from '@heroicons/react/20/solid';
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { useState } from 'react';
 import { ItemType } from './page';
 
