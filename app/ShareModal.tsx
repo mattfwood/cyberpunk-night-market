@@ -1,10 +1,14 @@
 import { Dialog } from '@headlessui/react';
+import { useRouter } from 'next/navigation';
 import QRCode from 'qrcode';
 import { useEffect, useState } from 'react';
 
 export function ShareModal() {
+  const router = useRouter();
+  console.log(router);
+
   const [isOpen, setIsOpen] = useState(false);
-  const [qrCode, setQrCode] = useState('');
+  const [qrCode, setQrCode] = useState<string | null>(null);
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
@@ -15,25 +19,39 @@ export function ShareModal() {
   };
 
   useEffect(() => {
-    generateQrCode();
-  }, []);
+    if (isOpen) {
+      generateQrCode();
+    } else {
+      setQrCode(null);
+    }
+  }, [isOpen]);
 
   return (
     <>
-      <button
-        className="ml-[100%] bg-primary text-white p-2 rounded-md"
-        onClick={openModal}
-      >
-        Share
-      </button>
+      <div className="flex justify-end">
+        <button
+          className="ml-[100%] bg-primary text-white p-2 text-sm rounded-md"
+          onClick={openModal}
+        >
+          Share
+        </button>
+      </div>
       <Dialog open={isOpen} onClose={closeModal}>
-        <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
+        <Dialog.Overlay className="fixed inset-0 bg-black opacity-70" />
         <div className="fixed inset-0 flex items-center justify-center">
           <Dialog.Panel className="bg-white rounded-md p-4">
             <Dialog.Title className="text-lg font-bold">
               Share Link to Night Market
             </Dialog.Title>
-            <img src={qrCode} alt="QR Code to current URL" />
+            {!qrCode ? (
+              <img
+                className="max-w-[404px] max-h-[404px] w-full h-full"
+                src={qrCode}
+                alt="QR Code to current URL"
+              />
+            ) : (
+              <div className="animate-pulse w-full">Generating QR Code...</div>
+            )}
           </Dialog.Panel>
         </div>
       </Dialog>
