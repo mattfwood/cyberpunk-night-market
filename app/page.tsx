@@ -14,7 +14,7 @@ export type ItemType = {
 
 const defaultItems = [
   {
-    name: 'Item 1',
+    name: 'Gun',
     company: 'Arasaka',
     description: 'This is item 1',
     price: 100,
@@ -64,7 +64,7 @@ export default function Home() {
           </div>
         ))}
         <div className="flex justify-end">
-          <h2 className="text-2xl font-bold">Total: ${total}</h2>
+          <h2 className="text-2xl font-bold">Total: €{total}</h2>
         </div>
       </main>
     </div>

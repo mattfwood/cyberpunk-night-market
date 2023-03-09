@@ -1,6 +1,7 @@
 'use client';
 
 import { Disclosure } from '@headlessui/react';
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { ItemType } from './page';
 
 type ItemProps = {
@@ -11,31 +12,40 @@ type ItemProps = {
 const Item = ({ item, updateItemQuantity }: ItemProps) => {
   return (
     <Disclosure>
-      <div key={item.name} className="p-4 mb-4 flex">
-        <Disclosure.Button className="flex justify-between items-center w-full hover:bg-primary-200 transition-all p-2">
-          <div>
-            <h2 className="text-2xl font-bold">{item.name}</h2>
-            <p className="text-sm text-gray-500">{item.company}</p>
+      {({ open }) => (
+        <div className="p-4 mb-4">
+          <div key={item.name} className="flex">
+            <div className="w-full">
+              <Disclosure.Button className="flex justify-between items-center w-full hover:bg-primary-200 transition-all p-2">
+                <div>
+                  <h2 className="text-2xl font-bold">{item.name}</h2>
+                  <p className="text-sm text-gray-500">{item.company}</p>
+                </div>
+                <div className="flex">
+                  <p className="text-lg font-bold">${item.price}</p>
+                  <ChevronDownIcon
+                    className={`w-6 h-6 text-white ${open ? 'rotate-180' : ''}`}
+                  />
+                </div>
+              </Disclosure.Button>
+            </div>
+            <div className="flex flex-col w-14 justify-center pl-2">
+              <input
+                className="text-secondary text-center"
+                type="number"
+                min={0}
+                value={item.quantity}
+                onChange={(e) => {
+                  updateItemQuantity(item, parseInt(e.target.value));
+                }}
+              />
+            </div>
           </div>
-          <p className="text-lg font-bold">${item.price}</p>
-        </Disclosure.Button>
-        <Disclosure.Panel>
-          <p className="text-sm">{item.description}</p>
-        </Disclosure.Panel>
-        <div className="flex flex-col w-10 justify-center">
-          {/* <button>+</button> */}
-          <input
-            className="text-secondary"
-            type="number"
-            min={0}
-            value={item.quantity}
-            onChange={(e) => {
-              updateItemQuantity(item, parseInt(e.target.value));
-            }}
-          />
-          {/* <button>-</button> */}
+          <Disclosure.Panel>
+            <p className="text-sm p-2">{item.description}</p>
+          </Disclosure.Panel>
         </div>
-      </div>
+      )}
     </Disclosure>
   );
 };
