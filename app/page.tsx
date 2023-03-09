@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import qs from 'qs';
-import QRCode from 'qrcode';
 
 import Item, { ItemForm } from './Item';
 import { ShareModal } from './ShareModal';
@@ -14,16 +13,19 @@ export type ItemType = {
   price: number;
   category: string;
   quantity: number;
-};
+} & { [key: string]: string | number };
 
 const defaultItems = [
   {
-    name: 'Gun',
-    company: 'Arasaka',
-    description: 'This is item 1',
+    name: 'Very Heavy Pistol',
+    company: '',
+    description: '',
     price: 100,
     category: 'weapons',
     quantity: 0,
+    skill: 'Handgun',
+    singleShotDamage: '4d6',
+    rateOfFire: '1',
   },
 ] as ItemType[];
 
@@ -48,9 +50,10 @@ export default function Home() {
     setItems(newItems);
   };
 
-  const total = items.reduce((acc, item) => {
-    return acc + item.price * item.quantity;
-  }, 0);
+  const removeItem = (item: ItemType) => {
+    const newItems = items.filter((i) => i.name !== item.name);
+    setItems(newItems);
+  };
 
   // load items from query string
   useEffect(() => {
@@ -70,6 +73,20 @@ export default function Home() {
     window.history.replaceState({}, '', `/?${query}`);
   }, [items]);
 
+  // find total
+  const total = items.reduce((acc, item) => {
+    return acc + item.price * item.quantity;
+  }, 0);
+
+  // format total without cents
+  const formattedTotal = total
+    .toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+    })
+    .replace('$', '');
+
   return (
     <div>
       <div className="flex justify-center px-2">
@@ -80,15 +97,16 @@ export default function Home() {
               <h2 className="text-3xl font-bold capitalize">{category}</h2>
               {items.map((item) => (
                 <Item
+                  key={item.name}
                   item={item}
                   updateItemQuantity={updateItemQuantity}
-                  key={item.name}
+                  removeItem={removeItem}
                 />
               ))}
             </div>
           ))}
           <div className="flex justify-end">
-            <h2 className="text-2xl font-bold">Total: €{total}</h2>
+            <h2 className="text-2xl font-bold">Total: €{formattedTotal}</h2>
           </div>
           <ItemForm
             onSubmit={(newItem) => setItems((prev) => [...prev, newItem])}

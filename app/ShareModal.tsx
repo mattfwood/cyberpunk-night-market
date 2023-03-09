@@ -1,12 +1,8 @@
 import { Dialog } from '@headlessui/react';
-import { useRouter } from 'next/navigation';
 import QRCode from 'qrcode';
 import { useEffect, useState } from 'react';
 
 export function ShareModal() {
-  const router = useRouter();
-  console.log(router);
-
   const [isOpen, setIsOpen] = useState(false);
   const [qrCode, setQrCode] = useState<string | null>(null);
 
