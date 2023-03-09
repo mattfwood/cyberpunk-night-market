@@ -46,6 +46,7 @@ export function ShareModal() {
             {!qrCode ? (
               <img
                 className="max-w-[404px] max-h-[404px] w-full h-full"
+                // @ts-ignore
                 src={qrCode}
                 alt="QR Code to current URL"
               />
