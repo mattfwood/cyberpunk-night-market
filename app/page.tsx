@@ -33,8 +33,9 @@ export default function Home() {
   const [items, setItems] = useState<ItemType[]>(defaultItems);
 
   const groupedItems = items.reduce((acc, item) => {
-    if (!acc[item.category]) {
-      acc[item.category] = [];
+    const category = item.category.toLowerCase();
+    if (!acc[category]) {
+      acc[category] = [];
     }
     acc[item.category].push(item);
     return acc;
