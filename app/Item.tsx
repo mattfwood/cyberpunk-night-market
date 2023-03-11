@@ -39,7 +39,7 @@ const Item = ({ item, updateItemQuantity, removeItem }: ItemProps) => {
             <div className="w-full">
               <Disclosure.Button className="flex justify-between items-center w-full hover:bg-primary-200 transition-all p-2">
                 <div>
-                  <h2 className="text-2xl font-bold">{name}</h2>
+                  <h2 className="text-2xl font-bold text-left">{name}</h2>
                   <p className="text-sm text-gray-500">{company}</p>
                 </div>
                 <div className="flex">
