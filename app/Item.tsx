@@ -154,7 +154,7 @@ export function ItemForm({ onSubmit }: { onSubmit: (item: ItemType) => void }) {
                 <label className="capitalize" key={field}>
                   <div className="text-sm">{field}</div>
                   <input
-                    className="border border-gray-300 text-secondary p-1 w-full"
+                    className="text-secondary p-1 w-full focus:ring-primary focus:ring-1"
                     type="text"
                     name={field}
                     id={field}
